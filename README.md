@@ -216,6 +216,39 @@ This stacked area chart clearly shows the fluid displacement at cell (1,1,1). As
 - Oil (red) is produced, reducing from over 80% to about 33%
 - Water (blue) remains relatively constant at the bottom
 
+### Animated Visualizations
+
+![Saturation Evolution](figures/saturation_evolution.gif)
+
+This animation shows the dramatic evolution of fluid saturations at cell (1,1,1) over the 10-year production period. Watch as:
+- The pie chart reveals gas (green) expanding from a tiny sliver to over half the pore space
+- Oil (red) shrinks as it's produced
+- The time series on the right tracks the continuous changes
+
+![Reservoir Evolution](figures/reservoir_evolution.gif)
+
+This comprehensive animation combines multiple key metrics:
+- **Top left**: Pressure decline at the monitored cell
+- **Top right**: Current saturation distribution
+- **Bottom**: Field oil production rate showing the production profile
+
+![Pressure Spatial Evolution](figures/pressure_spatial_evolution.gif)
+
+This animation shows the pressure distribution evolving across all three reservoir layers:
+- **Producer well** (black circle at 0,0): Creates expanding pressure drawdown zone
+- **Injector well** (blue triangle at 9,9): Provides pressure support, especially in deeper layers
+- **Layer differences**: Upper layers show more pressure depletion due to gas expansion
+- Watch the pressure gradient develop and propagate outward from the producer
+
+![Saturation Spatial Evolution](figures/saturation_spatial_evolution.gif)
+
+This comprehensive animation displays how oil, water, and gas saturations evolve spatially:
+- **Top row**: Oil saturation decreasing near the producer as oil is extracted
+- **Middle row**: Water saturation remaining relatively stable with slight increases
+- **Bottom row**: Gas saturation increasing dramatically near the producer in upper layers
+- **Layer effects**: Gas appears primarily in layers 1-2 where pressure drops below bubble point
+- The animation clearly shows the displacement front moving outward from the producer well
+
 ### Production Performance
 
 ![Production Analysis](figures/production_analysis.png)
@@ -269,8 +302,10 @@ Generate these visualizations yourself:
 ```bash
 # Create all figures
 python viz_scripts/01_reservoir_overview.py
-python viz_scripts/02_time_evolution.py
+python viz_scripts/02_time_evolution_summary.py
 python viz_scripts/03_production_analysis.py
+python viz_scripts/04_create_animations.py  # Creates time-based animations
+python viz_scripts/06_spatial_animations.py  # Creates spatial distribution GIFs
 ```
 
 ## Applications
