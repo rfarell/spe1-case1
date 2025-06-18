@@ -1,0 +1,21 @@
+SPE1 Case 1 - Sample Data Information
+=====================================
+
+The full simulation outputs are generated when you run the pipeline.
+These include:
+
+1. HDF5 file with complete grid timeseries (patched/SPE1CASE1_PATCHED.h5)
+   - Size: ~57 KB (compressed)
+   - Contains: 123 timesteps × 10×10×3 grid
+   - Parameters: PRESSURE, SWAT, SGAS, RS
+
+2. Parquet file with summary data (patched/SPE1CASE1_PATCHED.parquet)
+   - Size: ~9 KB
+   - Contains: Field production rates and selected cell data
+
+To generate these files:
+1. Place SPE1CASE1.DATA in data/ directory
+2. Run the simulation pipeline as described in README.md
+
+The figures/ directory contains visualizations of the dataset that
+demonstrate what the simulation produces.

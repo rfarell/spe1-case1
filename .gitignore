@@ -1,0 +1,68 @@
+# Auto-generated files
+patched/
+outputs/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+env/
+.venv/
+.conda/
+.claude/
+
+# Data files
+# *.UNSMRY
+# *.SMSPEC
+# *.RSM
+# *.INIT
+# *.EGRID
+# *.UNRST
+# *.PRT
+# *.DBG
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.bak
+*~
+
+# Jupyter
+.ipynb_checkpoints
+*.ipynb
+
+# Additional simulation outputs
+*.X[0-9][0-9][0-9][0-9]
+*.RST
+
+# # HDF5 and Parquet files in patched directory
+# patched/*.h5
+# patched/*.parquet
+
+# # Data files (user should provide their own)
+# data/*.DATA
+# data/*.GRDECL
+
+# IMPORTANT: figures/ directory is NOT ignored
+# This ensures visualization outputs are tracked by git
