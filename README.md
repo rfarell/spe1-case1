@@ -203,15 +203,18 @@ The cross-section view shows the three-layer structure with pressure increasing 
 
 ![Time Evolution](figures/time_evolution.png)
 
-Over the 10-year production period:
-- **Pressure declines** as fluids are produced
-- **Water saturation increases** as water moves in to replace produced oil
-- **Gas saturation increases** as pressure drops below bubble point
-- **Oil saturation decreases** as oil is produced
+The plots show evolution at the monitored cell (1,1,1). Over the 10-year production period:
+- **Pressure declines** from 5,192 to 4,028 bar (22% reduction)
+- **Gas saturation increases dramatically** from 5.5% to 55% as pressure falls below bubble point
+- **Oil saturation decreases** from 82.5% to 33% (60% relative reduction)
+- **Water saturation remains stable** around 12%
 
-![Oil Depletion](figures/oil_depletion_snapshots.png)
+![Saturation Stack](figures/saturation_stack.png)
 
-These snapshots show how oil (red) is gradually displaced by water and gas over the production period. The depletion pattern is influenced by well locations and reservoir properties.
+This stacked area chart clearly shows the fluid displacement at cell (1,1,1). As production proceeds:
+- Gas (green) expands significantly as dissolved gas comes out of solution
+- Oil (red) is produced, reducing from over 80% to about 33%
+- Water (blue) remains relatively constant at the bottom
 
 ### Production Performance
 
@@ -223,46 +226,41 @@ Key production metrics:
 - **Recovery factor** approaches 30% of original oil in place
 - **Average pressure** declines from ~380 to ~340 bar
 
-## Accessing the Full Dataset
+## Accessing the Dataset
 
-### HDF5 Format
+### Summary Data (Parquet Format)
 
-The complete grid timeseries data is stored in `patched/SPE1CASE1_PATCHED.h5`:
+The time-series summary data is available in `patched/SPE1CASE1_PATCHED.parquet`:
 
 ```python
-import h5py
-import numpy as np
+import pandas as pd
 
-# Open the dataset
-with h5py.File('patched/SPE1CASE1_PATCHED.h5', 'r') as f:
-    # Get dimensions
-    nx, ny, nz = f.attrs['nx'], f.attrs['ny'], f.attrs['nz']
-    n_timesteps = f.attrs['n_timesteps']
-    
-    # Access pressure data (4D array: time × x × y × z)
-    pressure = f['grid_data/PRESSURE'][:]
-    
-    # Get pressure evolution at specific cell
-    cell_pressure = pressure[:, 5, 5, 1]  # Cell (5,5,1) over time
-    
-    # Get pressure distribution at specific time
-    pressure_t50 = pressure[50, :, :, :]  # 3D grid at timestep 50
+# Load summary data
+df = pd.read_parquet('patched/SPE1CASE1_PATCHED.parquet')
+
+# Available columns:
+# - BPR:1,1,1 - Pressure at cell (1,1,1) in bars
+# - BWSAT:1,1,1 - Water saturation at cell (1,1,1)
+# - BGSAT:1,1,1 - Gas saturation at cell (1,1,1)
+# - FOPR - Field oil production rate (SM³/day)
+# - FOPT - Cumulative oil production (SM³)
+
+# Calculate oil saturation
+oil_sat = 1.0 - df['BWSAT:1,1,1'] - df['BGSAT:1,1,1']
+
+# Plot pressure evolution
+df['BPR:1,1,1'].plot()
 ```
 
-### Available Properties
+### Binary Output Files
 
-1. **PRESSURE** - Reservoir pressure in bars
-2. **SWAT** - Water saturation (fraction, 0-1)
-3. **SGAS** - Gas saturation (fraction, 0-1)
-4. **RS** - Dissolved gas-oil ratio
+The simulation also produces binary output files in Eclipse format:
+- `*.UNSMRY` / `*.SMSPEC` - Summary data (field rates, well data, selected cells)
+- `*.UNRST` - Unified restart file with full grid properties at each report step
+- `*.INIT` - Initial grid properties
+- `*.EGRID` - Grid geometry
 
-Note: Oil saturation can be calculated as: `SOIL = 1.0 - SWAT - SGAS`
-
-### Data Structure
-
-- **Shape**: (123 timesteps, 10 x-cells, 10 y-cells, 3 layers)
-- **Time span**: Monthly data from 2015-01-01 to 2024-12-31
-- **File size**: ~6 MB (compressed HDF5)
+These can be read using the `resdata` Python package for more detailed analysis.
 
 ## Visualization Scripts
 

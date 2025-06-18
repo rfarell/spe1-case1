@@ -13,9 +13,9 @@ with h5py.File('patched/SPE1CASE1_PATCHED.h5', 'r') as f:
     sgas_init = f['grid_data/SGAS'][0, :, :, :]
     soil_init = 1.0 - swat_init - sgas_init
 
-# Create figure
-fig = plt.figure(figsize=(12, 10))
-gs = gridspec.GridSpec(3, 3, figure=fig, hspace=0.3, wspace=0.3)
+# Create figure with 4 rows instead of 3
+fig = plt.figure(figsize=(12, 13))
+gs = gridspec.GridSpec(4, 3, figure=fig, hspace=0.3, wspace=0.3)
 
 # Plot initial pressure for each layer
 for k in range(nz):
@@ -25,6 +25,9 @@ for k in range(nz):
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
     plt.colorbar(im, ax=ax, fraction=0.046)
+    # Mark the monitored cell (1,1,1) 
+    if k == 1:
+        ax.plot(0, 0, 'k*', markersize=10)
 
 # Plot initial oil saturation for each layer
 for k in range(nz):
@@ -40,6 +43,15 @@ for k in range(nz):
     ax = fig.add_subplot(gs[2, k])
     im = ax.imshow(swat_init[:, :, k].T, origin='lower', cmap='Blues', vmin=0, vmax=1)
     ax.set_title(f'Layer {k+1} Water Saturation')
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    plt.colorbar(im, ax=ax, fraction=0.046)
+
+# Plot gas saturation for each layer
+for k in range(nz):
+    ax = fig.add_subplot(gs[3, k])
+    im = ax.imshow(sgas_init[:, :, k].T, origin='lower', cmap='Greens', vmin=0, vmax=1)
+    ax.set_title(f'Layer {k+1} Gas Saturation')
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
     plt.colorbar(im, ax=ax, fraction=0.046)
